@@ -2,13 +2,18 @@ package com.newtech.employeeservice.service.impl;
 
 import com.newtech.employeeservice.dto.EmployeeDto;
 import com.newtech.employeeservice.entity.Employee;
+import com.newtech.employeeservice.exception.ErrorDetails;
+import com.newtech.employeeservice.exception.ResourceNotFounfException;
 import com.newtech.employeeservice.mapper.MyMapper;
 import com.newtech.employeeservice.repo.EmployeeRepository;
 import com.newtech.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Service
@@ -27,8 +32,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id).orElseThrow(
-                ()-> new RuntimeException("Resource not found: id = " + id)
+                ()-> new ResourceNotFounfException("Employee not found: id = " + id)
         );
        return myMapper.toEmployeeDto(employee);
+    }
+@ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDetails> globalExceptionHandler(
+                                Exception ex , WebRequest request){
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false),
+                "INTERNAL_SERVER_ERROR"
+        );
+        return  new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
