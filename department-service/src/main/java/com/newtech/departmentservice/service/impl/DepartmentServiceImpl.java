@@ -2,6 +2,7 @@ package com.newtech.departmentservice.service.impl;
 
 import com.newtech.departmentservice.dto.DepartmentDto;
 import com.newtech.departmentservice.entity.Department;
+import com.newtech.departmentservice.exception.ResourceNotFoundException;
 import com.newtech.departmentservice.repo.DepartmentRepository;
 import com.newtech.departmentservice.service.DepartmentService;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
       Department department = departmentRepository
               .findByDepartmentCode(departmentCode);
+      if(department == null)
+          throw new ResourceNotFoundException(
+                  "Department not found: departmentCode= "+ departmentCode);
+
         return modelMapper.map(department, DepartmentDto.class);
     }
 }
