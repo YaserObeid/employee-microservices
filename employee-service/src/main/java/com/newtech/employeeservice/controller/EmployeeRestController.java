@@ -1,5 +1,6 @@
 package com.newtech.employeeservice.controller;
 
+import com.newtech.employeeservice.dto.ApiResponseDto;
 import com.newtech.employeeservice.dto.EmployeeDto;
 import com.newtech.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -26,11 +27,11 @@ public class EmployeeRestController {
 
     //POST: save an Employee /api/employees
     @GetMapping("{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(
+    public ResponseEntity<ApiResponseDto> getEmployeeById(
             @PathVariable Long id){
-        EmployeeDto employee = employeeService.getEmployeeById(id);
+        ApiResponseDto apiResponseDto = employeeService.getEmployeeById(id);
 
-        return new ResponseEntity<>(employee, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
     }
 
 
