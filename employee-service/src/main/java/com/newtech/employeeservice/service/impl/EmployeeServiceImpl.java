@@ -36,15 +36,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         );
        return myMapper.toEmployeeDto(employee);
     }
-@ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDetails> globalExceptionHandler(
-                                Exception ex , WebRequest request){
-        ErrorDetails errorDetails = new ErrorDetails(
-                LocalDateTime.now(),
-                ex.getMessage(),
-                request.getDescription(false),
-                "INTERNAL_SERVER_ERROR"
-        );
-        return  new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+
 }
